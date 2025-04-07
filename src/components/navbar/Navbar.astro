@@ -2,178 +2,167 @@
 import Button from "./Button.astro";
 ---
 
-<nav class="w-full bg-[#171717] h-[4rem] sticky top-0  shadow-lg p-4 z-20" x-data="{ isMobileMenuOpen: false }">
-  <div class="w-[80%] mx-auto h-full flex flex-col md:flex-row space-x-1 text-white items-center justify-between">
-    
-    <!-- Botón menú móvil -->
-    <div class="flex justify-between items-center w-full md:hidden py-2">
-      <div>Logo</div> 
-      <button 
-        @click="isMobileMenuOpen = !isMobileMenuOpen" 
-        class="text-white focus:outline-none"
-      >
+<nav class="w-full bg-[#171717] h-[4rem] sticky top-0 shadow-lg p-4 z-20">
+  <div class="container mx-auto flex flex-col md:flex-row items-center justify-between">
+    <!-- Header móvil -->
+    <div class="flex justify-between items-center w-full md:hidden">
+      <div class="text-white font-bold">Logo</div>
+      <button id="mobileToggle" class="text-white focus:outline-none">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
       </button>
     </div>
-    
-    <!-- Menú -->
-    <ul 
-      id="mobileMenu" 
-      class="hidden md:flex flex-col md:flex-row w-full md:w-1/2 items-start md:items-center md:space-x-4 h-auto md:h-full justify-between"
-      x-show="isMobileMenuOpen || window.innerWidth >= 768"
-      @click.away="isMobileMenuOpen = false"
-      :class="{ 'hidden': !isMobileMenuOpen && window.innerWidth < 768 }"
-      x-cloak
-    >
-      <li class="h-full w-full md:w-auto flex items-center transition-all duration-300 ease-in-out md:hover:border-b-8 border-[#CEFF1A]">
-        <a href="#" class="h-full w-full py-2 md:py-0 flex items-center">Logo</a>
+
+    <!-- Menú principal -->
+    <ul id="menu" class="hidden md:flex flex-col md:flex-row w-full md:w-auto items-start md:items-center space-y-2 md:space-y-0 md:space-x-4 mt-4 md:mt-0 text-white">
+      <li class="w-full md:w-auto hover:text-[#CEFF1A] transition-colors">
+        <a href="#" class="block py-2">Logo</a>
       </li>
-      
+
       <!-- Primer menú desplegable -->
-      <li 
-        class="group h-full w-full md:w-auto flex items-center transition-all duration-300 ease-in-out md:hover:border-b-8 border-[#CEFF1A] relative" 
-        x-data="{ open: false }" 
-        @mouseenter="if (window.innerWidth >= 768) open = true" 
-        @mouseleave="if (window.innerWidth >= 768) open = false"
-      >
-        <button 
-          class="h-full w-full py-2 md:py-0 flex items-center justify-between md:justify-center gap-x-1"
-          type="button"
-          @click="if (window.innerWidth < 768) open = !open"
-        >
+      <li class="relative dropdown group w-full md:w-auto hover:text-[#CEFF1A] transition-colors">
+        <button class="dropdown-button flex items-center justify-between w-full py-2 md:py-0 focus:outline-none">
           Servicios
-          <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <svg class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
           </svg>
         </button>
-        
-        <div
-          x-cloak
-          x-show="open"
-          x-transition:enter="transition ease-out duration-200"
-          x-transition:enter-start="opacity-0 translate-y-1"
-          x-transition:enter-end="opacity-100 translate-y-0"
-          x-transition:leave="transition ease-in duration-150"
-          x-transition:leave-start="opacity-100 translate-y-0"
-          x-transition:leave-end="opacity-0 translate-y-1"
-          class="relative md:absolute left-0 md:left-1/2 z-10 mt-0 md:mt-3 w-full md:w-screen max-w-full md:max-w-md md:-translate-x-1/2 transform top-full bg-white md:bg-transparent"
-        >
-          <div class="overflow-hidden rounded-lg max-[931px]:rounded-none shadow-lg ring-1 ring-black ring-opacity-5">
-            <div class="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
-              <a href="#" class="flex items-start rounded-lg p-3 hover:bg-gray-50">
-                <div class="ml-4">
-                  <p class="text-base font-medium text-gray-900">Desarrollo Web</p>
-                  <p class="mt-1 text-sm text-gray-500">Creamos sitios web a medida</p>
-                </div>
-              </a>
-              <a href="#" class="flex items-start rounded-lg p-3 hover:bg-gray-50">
-                <div class="ml-4">
-                  <p class="text-base font-medium text-gray-900">Marketing Digital</p>
-                  <p class="mt-1 text-sm text-gray-500">Mejoramos la presencia de tu marca</p>
-                </div>
-              </a>
-            </div>
-          </div>
+        <!-- Submenú -->
+        <div class="dropdown-menu hidden bg-white text-black rounded-lg shadow-lg p-4 min-w-[12rem]">
+          <a href="#" class="block p-2 hover:bg-gray-100 transition-colors">
+            <p class="font-medium">Desarrollo Web</p>
+            <p class="text-sm">Creamos sitios web a medida</p>
+          </a>
+          <a href="#" class="block p-2 hover:bg-gray-100 transition-colors">
+            <p class="font-medium">Marketing Digital</p>
+            <p class="text-sm">Mejoramos la presencia de tu marca</p>
+          </a>
         </div>
       </li>
-      
+
       <!-- Segundo menú desplegable -->
-      <li 
-        class="group h-full w-full md:w-auto flex items-center transition-all duration-300 ease-in-out md:hover:border-b-8 border-[#CEFF1A] relative" 
-        x-data="{ open: false }" 
-        @mouseenter="if (window.innerWidth >= 768) open = true" 
-        @mouseleave="if (window.innerWidth >= 768) open = false"
-      >
-        <button 
-          class="h-full w-full py-2 md:py-0 flex items-center justify-between md:justify-center gap-x-1"
-          type="button"
-          @click="if (window.innerWidth < 768) open = !open"
-        >
+      <li class="relative dropdown group w-full md:w-auto hover:text-[#CEFF1A] transition-colors">
+        <button class="dropdown-button flex items-center justify-between w-full py-2 md:py-0 focus:outline-none">
           Sobre nosotros
-          <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <svg class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
           </svg>
         </button>
-        
-        <div
-          x-cloak
-          x-show="open"
-          x-transition:enter="transition ease-out duration-200"
-          x-transition:enter-start="opacity-0 translate-y-1"
-          x-transition:enter-end="opacity-100 translate-y-0"
-          x-transition:leave="transition ease-in duration-150"
-          x-transition:leave-start="opacity-100 translate-y-0"
-          x-transition:leave-end="opacity-0 translate-y-1"
-          class="relative md:absolute left-0 md:left-1/2 z-10 mt-0 md:mt-3 w-full md:w-screen max-w-full md:max-w-md md:-translate-x-1/2 transform top-full bg-white md:bg-transparent"
-        >
-          <div class="overflow-hidden rounded-lg max-[931px]:rounded-none shadow-lg ring-1 ring-black ring-opacity-5">
-            <div class="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
-              <a href="#" class="flex items-start rounded-lg p-3 hover:bg-gray-50">
-                <div class="ml-4">
-                  <p class="text-base font-medium text-gray-900">Nuestra historia</p>
-                  <p class="mt-1 text-sm text-gray-500">Conoce cómo empezamos</p>
-                </div>
-              </a>
-              <a href="#" class="flex items-start rounded-lg p-3 hover:bg-gray-50">
-                <div class="ml-4">
-                  <p class="text-base font-medium text-gray-900">Equipo</p>
-                  <p class="mt-1 text-sm text-gray-500">Conoce a nuestros expertos</p>
-                </div>
-              </a>
-            </div>
-          </div>
+        <!-- Submenú -->
+        <div class="dropdown-menu hidden bg-white text-black rounded-lg shadow-lg p-4 min-w-[12rem]">
+          <a href="#" class="block p-2 hover:bg-gray-100 transition-colors">
+            <p class="font-medium">Nuestra historia</p>
+            <p class="text-sm">Conoce cómo empezamos</p>
+          </a>
+          <a href="#" class="block p-2 hover:bg-gray-100 transition-colors">
+            <p class="font-medium">Equipo</p>
+            <p class="text-sm">Conoce a nuestros expertos</p>
+          </a>
         </div>
       </li>
-      
-      <!-- Último elemento sin menú desplegable -->
-      <li class="h-full w-full md:w-auto flex items-center transition-all duration-300 ease-in-out md:hover:border-b-8 border-[#CEFF1A]">
-        <a href="#" class="h-full w-full py-2 md:py-0 flex items-center">Clientes</a>
+
+      <li class="w-full md:w-auto hover:text-[#CEFF1A] transition-colors">
+        <a href="#" class="block py-2">Clientes</a>
       </li>
     </ul>
-    
-    <div class="w-full justify-end gap-5 max-[993px]:text-sm flex">
-      <div class="border-2 border-white rounded-4xl transition duration-700 hover:border-[#CEFF1A] items-center px-6 py-2 max-[993px]:py-3 hover:text-[#CEFF1A] max-[931px]:hidden">
-        Compare Versions 
+
+    <!-- Botones de acción (se muestran en desktop) -->
+    <div class="hidden md:flex gap-5 items-center">
+      <div class="border-2 border-white rounded-full px-6 py-2 hover:border-[#CEFF1A] transition-colors">
+        Compare Versions
       </div>
-      
-      <div class="rounded-4xl px-6 py-2 transition flex items-center gap-2 bg-white text-black hover:border-[#CEFF1A] hover:bg-[#CEFF1A] max-[931px]:hidden">    
+      <div class="rounded-full px-6 py-2 bg-white text-black flex items-center gap-2 hover:bg-[#CEFF1A] hover:border-[#CEFF1A] transition-colors">
         Contact Sales
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-circle-arrow-right translate-0.5 size-8">
-          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="icon" viewBox="0 0 24 24">
           <path d="M12 2l.324 .005a10 10 0 1 1 -.648 0l.324 -.005zm.613 5.21a1 1 0 0 0 -1.32 1.497l2.291 2.293h-5.584l-.117 .007a1 1 0 0 0 .117 1.993h5.584l-2.291 2.293l-.083 .094a1 1 0 0 0 1.497 1.32l4 -4l.073 -.082l.064 -.089l.062 -.113l.044 -.11l.03 -.112l.017 -.126l.003 -.075l-.007 -.118l-.029 -.148l-.035 -.105l-.054 -.113l-.071 -.111a1.008 1.008 0 0 0 -.097 -.112l-4 -4z"/>
         </svg>
       </div>
     </div>
-  </nav>
+  </div>
+</nav>
 
 <style>
-  [x-cloak] {
-    display: none !important;
+  /* Oculta los dropdowns por defecto */
+  .dropdown-menu {
+    display: none;
   }
-  
+  /* Clase para mostrarlos */
+  .dropdown-menu.active {
+    display: block;
+  }
+  /* Estilos para el menú móvil */
   @media (max-width: 767px) {
-    #mobileMenu {
+    #menu {
+      display: none;
+      flex-direction: column;
+      background-color: #171717;
+      width: 100%;
+      padding: 1rem;
       position: absolute;
       top: 4rem;
       left: 0;
-      right: 0;
-      background: #171717;
       z-index: 50;
-      padding: 1rem;
     }
-    
-    .group .relative {
-      position: static !important;
+    #menu.active {
+      display: flex;
     }
-    
-    .group .transform {
-      width: 100% !important;
-      max-width: 100% !important;
-      left: 0 !important;
+    .dropdown-menu {
+      position: static;
+      box-shadow: none;
+      padding: 0;
     }
   }
 </style>
 
-<script src="//unpkg.com/alpinejs" defer></script>
+<script type="module">
+  import { computePosition, offset, flip, shift, autoUpdate } from '@floating-ui/dom';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Toggle del menú móvil
+    const mobileToggle = document.getElementById('mobileToggle');
+    const menu = document.getElementById('menu');
+    mobileToggle.addEventListener('click', () => {
+      menu.classList.toggle('active');
+    });
+
+    // Selecciona cada dropdown
+    const dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach((dropdown) => {
+      const button = dropdown.querySelector('.dropdown-button');
+      const submenu = dropdown.querySelector('.dropdown-menu');
+
+      // Para desktop: muestra el submenú al hacer hover
+      button.addEventListener('mouseenter', () => {
+        if (window.innerWidth >= 768) {
+          submenu.classList.add('active');
+          autoUpdate(button, submenu, () => {
+            computePosition(button, submenu, {
+              placement: 'bottom-start',
+              middleware: [offset(4), flip(), shift()]
+            }).then(({ x, y }) => {
+              Object.assign(submenu.style, {
+                left: `${x}px`,
+                top: `${y}px`,
+                position: 'absolute'
+              });
+            });
+          });
+        }
+      });
+      button.addEventListener('mouseleave', () => {
+        if (window.innerWidth >= 768) {
+          submenu.classList.remove('active');
+        }
+      });
+      
+      // Para móviles: alterna el submenú al hacer click
+      button.addEventListener('click', (e) => {
+        if (window.innerWidth < 768) {
+          e.preventDefault();
+          submenu.classList.toggle('active');
+        }
+      });
+    });
+  });
+</script>
