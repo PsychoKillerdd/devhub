@@ -12,7 +12,7 @@ import { onMount } from 'astro/client';
       <a href="/contacto">Contacto</a>
     </div>
 
-    <div class="dropdown-wrapper">
+    <div class="dropdown-wrapper" id="dropdown-wrapper">
       <button id="menu-button">Menú</button>
       <div id="menu-dropdown" class="dropdown-menu hidden">
         <a href="/">Inicio</a>
@@ -80,8 +80,6 @@ import { onMount } from 'astro/client';
 
   .dropdown-menu {
     position: absolute;
-    top: 100%;
-    left: 0;
     background: white;
     color: black;
     border: 1px solid #ccc;
@@ -113,32 +111,53 @@ import { onMount } from 'astro/client';
 <script is:inline>
   import {
     computePosition,
-    autoUpdate,
     offset,
     flip,
     shift,
   } from 'https://esm.sh/@floating-ui/dom';
 
   document.addEventListener('DOMContentLoaded', () => {
-    const button = document.querySelector('#menu-button');
-    const dropdown = document.querySelector('#menu-dropdown');
+    const button = document.getElementById('menu-button');
+    const dropdown = document.getElementById('menu-dropdown');
+    const wrapper = document.getElementById('dropdown-wrapper');
 
-    if (!button || !dropdown) return;
+    let isOpen = false;
 
-    let cleanup = autoUpdate(button, dropdown, () => {
-      computePosition(button, dropdown, {
-        placement: 'bottom-end',
-        middleware: [offset(6), flip(), shift()],
-      }).then(({ x, y }) => {
+    const toggleDropdown = async () => {
+      isOpen = !isOpen;
+
+      if (isOpen) {
+        dropdown.classList.remove('hidden');
+
+        const { x, y } = await computePosition(button, dropdown, {
+          placement: 'bottom-end',
+          middleware: [offset(6), flip(), shift()],
+        });
+
         Object.assign(dropdown.style, {
           left: `${x}px`,
           top: `${y}px`,
         });
-      });
-    });
 
-    button.addEventListener('click', () => {
-      dropdown.classList.toggle('hidden');
+        // Click fuera del dropdown lo cierra
+        document.addEventListener('click', onClickOutside);
+      } else {
+        dropdown.classList.add('hidden');
+        document.removeEventListener('click', onClickOutside);
+      }
+    };
+
+    const onClickOutside = (e) => {
+      if (!wrapper.contains(e.target)) {
+        dropdown.classList.add('hidden');
+        isOpen = false;
+        document.removeEventListener('click', onClickOutside);
+      }
+    };
+
+    button.addEventListener('click', (e) => {
+      e.stopPropagation(); // evita que se cierre en el mismo click
+      toggleDropdown();
     });
   });
 </script>
