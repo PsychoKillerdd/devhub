@@ -1,163 +1,67 @@
 ---
-import { onMount } from 'astro/client';
+// Importamos Alpine.js desde CDN
+import Alpine from 'https://esm.sh/alpinejs@3.13.3';
+Alpine.start();
 ---
 
-<nav class="navbar">
-  <div class="navbar-container">
-    <div class="logo">MiSitio</div>
+<nav class="bg-gray-900 text-white shadow-lg" x-data="{ open: false }">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex h-16 items-center justify-between">
+      <!-- Logo -->
+      <div class="flex-shrink-0 text-xl font-bold">MiSitio</div>
 
-    <div class="nav-links">
-      <a href="/">Inicio</a>
-      <a href="/servicios">Servicios</a>
-      <a href="/contacto">Contacto</a>
-    </div>
-
-    <div class="dropdown-wrapper" id="dropdown-wrapper">
-      <button id="menu-button">Menú</button>
-      <div id="menu-dropdown" class="dropdown-menu hidden">
-        <a href="/">Inicio</a>
-        <a href="/servicios">Servicios</a>
-        <a href="/contacto">Contacto</a>
+      <!-- Menú desktop (oculto en mobile) -->
+      <div class="hidden md:flex space-x-8">
+        <a href="/" class="hover:text-yellow-400 transition-all relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-yellow-400 hover:after:w-full after:transition-all">Inicio</a>
+        <a href="/servicios" class="hover:text-yellow-400 transition-all relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-yellow-400 hover:after:w-full after:transition-all">Servicios</a>
+        <a href="/contacto" class="hover:text-yellow-400 transition-all relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-yellow-400 hover:after:w-full after:transition-all">Contacto</a>
       </div>
+
+      <!-- Botón mobile (solo visible en mobile) -->
+      <div class="md:hidden">
+        <button 
+          @click="open = !open" 
+          type="button" 
+          class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none"
+          aria-controls="mobile-menu" 
+          aria-expanded="false"
+        >
+          <span class="sr-only">Abrir menú</span>
+          <!-- Icono hamburguesa -->
+          <svg class="h-6 w-6" x-show="!open" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+          <!-- Icono X (cerrar) -->
+          <svg class="h-6 w-6" x-show="open" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Menú mobile (dropdown) -->
+  <div 
+    class="md:hidden absolute w-full z-50" 
+    id="mobile-menu"
+    x-show="open"
+    @click.away="open = false"
+    x-transition:enter="transition ease-out duration-100"
+    x-transition:enter-start="opacity-0 scale-95"
+    x-transition:enter-end="opacity-100 scale-100"
+    x-transition:leave="transition ease-in duration-75"
+    x-transition:leave-start="opacity-100 scale-100"
+    x-transition:leave-end="opacity-0 scale-95"
+  >
+    <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-gray-900 border-t border-gray-700">
+      <a href="/" class="text-white block px-3 py-2 rounded-md hover:bg-gray-700">Inicio</a>
+      <a href="/servicios" class="text-white block px-3 py-2 rounded-md hover:bg-gray-700">Servicios</a>
+      <a href="/contacto" class="text-white block px-3 py-2 rounded-md hover:bg-gray-700">Contacto</a>
     </div>
   </div>
 </nav>
 
 <style>
-  .navbar {
-    background-color: #111;
-    color: white;
-    padding: 1rem;
-  }
-
-  .navbar-container {
-    max-width: 1024px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 1.5rem;
-  }
-
-  .nav-links a {
-    color: white;
-    text-decoration: none;
-    position: relative;
-    transition: all 0.3s ease;
-  }
-
-  .nav-links a:hover {
-    color: black;
-  }
-
-  .nav-links a::after {
-    content: "";
-    position: absolute;
-    bottom: -4px;
-    left: 0;
-    width: 0%;
-    height: 2px;
-    background-color: yellow;
-    transition: width 0.3s ease;
-  }
-
-  .nav-links a:hover::after {
-    width: 100%;
-  }
-
-  .dropdown-wrapper {
-    position: relative;
-  }
-
-  .dropdown-menu {
-    position: absolute;
-    background: white;
-    color: black;
-    border: 1px solid #ccc;
-    border-radius: 0.5rem;
-    padding: 0.75rem;
-    margin-top: 0.5rem;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    min-width: 150px;
-    z-index: 999;
-  }
-
-  .dropdown-menu a {
-    display: block;
-    padding: 0.5rem 0;
-    text-decoration: none;
-    color: black;
-  }
-
-  .dropdown-menu a:hover {
-    color: #111;
-    font-weight: bold;
-  }
-
-  .hidden {
-    display: none;
-  }
+  /* Solo para las animaciones del subrayado */
+  [x-cloak] { display: none !important; }
 </style>
-
-<script is:inline>
-  import {
-    computePosition,
-    offset,
-    flip,
-    shift,
-  } from 'https://esm.sh/@floating-ui/dom';
-
-  document.addEventListener('DOMContentLoaded', () => {
-    const button = document.getElementById('menu-button');
-    const dropdown = document.getElementById('menu-dropdown');
-    const wrapper = document.getElementById('dropdown-wrapper');
-
-    let isOpen = false;
-
-    const toggleDropdown = async () => {
-      isOpen = !isOpen;
-
-      if (isOpen) {
-        dropdown.classList.remove('hidden');
-
-        const { x, y } = await computePosition(button, dropdown, {
-          placement: 'bottom-end',
-          middleware: [offset(6), flip(), shift()],
-        });
-
-        Object.assign(dropdown.style, {
-          left: `${x}px`,
-          top: `${y}px`,
-        });
-
-        // Click fuera del dropdown lo cierra
-        document.addEventListener('click', onClickOutside);
-      } else {
-        dropdown.classList.add('hidden');
-        document.removeEventListener('click', onClickOutside);
-      }
-    };
-
-    const onClickOutside = (e) => {
-      if (!wrapper.contains(e.target)) {
-        dropdown.classList.add('hidden');
-        isOpen = false;
-        document.removeEventListener('click', onClickOutside);
-      }
-    };
-
-    button.addEventListener('click', (e) => {
-      e.stopPropagation(); // evita que se cierre en el mismo click
-      toggleDropdown();
-    });
-  });
-</script>
