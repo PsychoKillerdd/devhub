@@ -133,52 +133,24 @@ import Splide from "@splidejs/splide";
 
 <!-- Inicialización de Splide -->
 <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js" is:inline></script>
-
-<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide-extension-auto-scroll@0.5.3/dist/js/splide-extension-auto-scroll.min.js" is:inline></script>
-
-<script is:inline>
-  document.addEventListener('DOMContentLoaded', function () {
-    // Verifica si Splide y la extensión AutoScroll están disponibles globalmente (necesario con CDNs)
-    if (typeof splide !== 'undefined' && typeof splide.Extensions !== 'undefined' && typeof splide.Extensions.AutoScroll !== 'undefined') {
-
-      const splideInstance = new Splide('.splide', {
-        // --- Configuración Principal ---
-        type        : 'loop',   // Necesario para que AutoScroll funcione bien
-        perPage     : 2,        // Mostrar 2 slides por defecto (móvil)
-        gap         : '1rem',   // Espacio entre slides (igual que tu original)
-        arrows      : false,    // Sin flechas
-        pagination  : false,    // Sin puntos de paginación
-        drag        : 'free',   // Opcional: permite arrastrar/lanzar el carrusel
-        focus       : 'center', // Opcional: mejora visual en carruseles continuos
-
-        // --- Configuración de AutoScroll ---
-        autoScroll: {
-          speed           : 1,    // Velocidad del desplazamiento (ajústala como prefieras)
-          pauseOnHover    : false, // NO pausar al pasar el ratón
-          pauseOnFocus    : false, // NO pausar al recibir foco (teclado/accesibilidad)
-          rewind          : false  // El 'loop' ya maneja el reinicio
-        },
-
-        // --- Configuración Responsiva (Breakpoints) ---
-        breakpoints: {
-          // A partir de 768px de ancho (considerado tablet/escritorio pequeño)
-          768: {
-            perPage: 3,   // Mostrar 3 slides
-          }
-          // Nota: Se eliminó 'fixedWidth' para que 'perPage' controle directamente
-          // cuántos elementos se ven, adaptándose mejor al contenedor.
-          // Si necesitas anchos fijos, puedes volver a añadir `fixedWidth: '100px'`
-          // aquí o dentro de los breakpoints, pero puede interferir con `perPage`.
-        }
-      });
-
-      // --- Montar Splide CON la extensión ---
-      // Es crucial pasar las extensiones al montar cuando se usan CDNs
-      splideInstance.mount(window.splide.Extensions);
-
-    } else {
-      // Mensaje de error si falta Splide o la extensión
-      console.error('Error: Splide.js core o la extensión AutoScroll no se cargaron correctamente. Verifica los scripts CDN.');
-    }
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    new Splide('.splide', {
+      type: 'loop',
+      perPage: 3,
+      perMove: 1,
+      autoplay: true,
+      interval: 1500,
+      pauseOnHover: false,
+      pauseOnFocus: false,
+      arrows: false,
+      pagination: false,
+      fixedWidth: '100px',
+      gap: '1rem',
+      breakpoints: {
+        640: { perPage: 2 },
+        1024: { perPage: 3 }
+      }
+    }).mount();
   });
 </script>
